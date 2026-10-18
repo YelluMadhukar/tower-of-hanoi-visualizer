@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tower of Hanoi Visualizer</title>
+    <title>Tower of Hanoi Visualizer Pro</title>
     <style>
         :root {
+            /* Dark Slate Theme Variables (Default) */
             --bg-gradient-start: #0f172a;
             --bg-gradient-end: #1e293b;
             --card-bg: #1e293b;
@@ -15,9 +16,11 @@
             --primary-hover: #4f46e5;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
+
             --neutral-dark: #334155;
             --border: #384252;
-
+            --shadow-color: rgba(0, 0, 0, 0.4);
             
             /* Disk Colors */
             --disk-1: #ef4444;
@@ -30,14 +33,32 @@
             --disk-8: #ec4899;
         }
 
+        /* Light Minimal Theme Class Override */
+        body.light-theme {
+            --bg-gradient-start: #f1f5f9;
+            --bg-gradient-end: #e2e8f0;
+
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #059669;
+            --danger: #dc2626;
+            --neutral-dark: #e2e8f0;
+            --border: #cbd5e1;
+            --shadow-color: rgba(148, 163, 184, 0.15);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
-        }
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
 
+        }
 
         body {
             background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
@@ -51,16 +72,35 @@
 
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
-        header {
 
+        header {
             text-align: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .theme-panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .theme-panel {
+                position: relative;
+                justify-content: center;
+                margin-top: 1rem;
+
+                margin-bottom: 0.5rem;
+            }
         }
 
         header h1 {
@@ -68,7 +108,7 @@
             font-weight: 700;
             letter-spacing: -0.025em;
             margin-bottom: 0.5rem;
-            background: linear-gradient(to right, #a5b4fc, #818cf8);
+            background: linear-gradient(to right, #6366f1, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -84,10 +124,10 @@
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 1.25rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px -5px var(--shadow-color);
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
+            gap: 1.25rem;
             justify-content: space-between;
             align-items: center;
         }
@@ -97,7 +137,7 @@
             align-items: center;
             gap: 0.75rem;
             flex: 1;
-            min-width: 220px;
+            min-width: 200px;
 
         }
 
@@ -127,7 +167,7 @@
             padding: 0.25rem 0.6rem;
             border-radius: 6px;
             font-size: 0.9rem;
-            min-width: 35px;
+            min-width: 40px;
             text-align: center;
         }
 
@@ -142,12 +182,11 @@
 
             color: var(--text-main);
             border: 1px solid var(--border);
-            padding: 0.6rem 1.2rem;
+            padding: 0.6rem 1.1rem;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -159,8 +198,8 @@
             transform: translateY(-1px);
         }
 
-
         button:disabled {
+
             opacity: 0.4;
             cursor: not-allowed;
         }
@@ -168,22 +207,39 @@
         button.btn-primary {
             background-color: var(--primary);
             border-color: var(--primary);
+            color: white;
         }
 
         button.btn-primary:hover:not(:disabled) {
             background-color: var(--primary-hover);
         }
 
+        button.btn-test {
+            background-color: transparent;
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        
+        body.light-theme button.btn-test {
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+
+        button.btn-test:hover:not(:disabled) {
+            background-color: var(--warning);
+            color: white;
+        }
+
         .stage-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 2.5rem 1rem 1.5rem 1rem;
-
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+            padding: 2.5rem 1rem 2.5rem 1rem;
+            box-shadow: 0 20px 25px -5px var(--shadow-color);
             position: relative;
             min-height: 320px;
             display: flex;
+
             align-items: flex-end;
             justify-content: space-around;
         }
@@ -195,51 +251,67 @@
             width: 30%;
             position: relative;
             height: 240px;
+            border-radius: 8px;
+            padding: 0 10px;
+        }
+
+        /* Highlight target drop channels during manual interaction drag events */
+        .rod-container.drag-over {
+            background-color: rgba(99, 102, 241, 0.06);
+            outline: 2px dashed var(--primary);
+
         }
 
         .rod-shaft {
             width: 14px;
-
             height: 220px;
             background: linear-gradient(to right, #64748b, #475569);
             border-radius: 6px 6px 0 0;
             position: absolute;
             bottom: 0;
             z-index: 1;
+            pointer-events: none;
         }
 
         .rod-base {
-            width: 90%;
+            width: 95%;
             height: 16px;
             background: linear-gradient(to bottom, #334155, #1e293b);
             border-radius: 4px;
             position: absolute;
+
             bottom: -16px;
             z-index: 2;
             border: 1px solid var(--border);
+            pointer-events: none;
         }
-
 
         .rod-label {
             position: absolute;
-            bottom: -42px;
+            bottom: -44px;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-muted);
-            background: rgba(0,0,0,0.2);
-            width: 32px;
-            height: 32px;
+            background: rgba(0,0,0,0.08);
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+
             border: 1px solid var(--border);
+            pointer-events: none;
+        }
+
+        body.light-theme .rod-label {
+            background: rgba(0,0,0,0.03);
         }
 
         .disks-stack {
             width: 100%;
+            height: 100%;
             display: flex;
-
             flex-direction: column-reverse;
             align-items: center;
             position: absolute;
@@ -248,21 +320,49 @@
             padding-bottom: 2px;
         }
 
+
+        /* Enhanced Bubble Animation & HTML5 Drag Properties */
         .disk {
             height: 24px;
-            border-radius: 6px;
-            margin-bottom: 2px;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            margin-bottom: 3px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255,255,255,0.25);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.3s ease, background-color 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
             font-weight: bold;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            cursor: grab;
+            user-select: none;
+        }
 
-            color: #fff;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-            border: 1px solid rgba(0, 0, 0, 0.2);
+
+        .disk:active {
+            cursor: grabbing;
+        }
+
+        .disk.draggable {
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .disk:hover {
+            transform: scale(1.04);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .disk.pop-active {
+            transform: translateY(-15px) scale(1.06);
+            z-index: 50;
+        }
+
+        /* Drag opacity state utility */
+
+        .disk.dragging {
+            opacity: 0.4;
         }
 
         .meta-container {
@@ -271,27 +371,28 @@
             gap: 1.5rem;
         }
 
-        @media (min-width: 650px) {
+        @media (min-width: 750px) {
             .meta-container {
-                grid-template-columns: 2fr 3fr;
+                grid-template-columns: 1fr 1fr;
             }
         }
 
         .info-card {
             background-color: var(--card-bg);
-
             border: 1px solid var(--border);
+
             border-radius: 16px;
             padding: 1.25rem;
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
+            box-shadow: 0 4px 6px -1px var(--shadow-color);
         }
 
         .info-card h2 {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            color: #a5b4fc;
+            color: var(--primary);
             border-bottom: 1px solid var(--border);
             padding-bottom: 0.5rem;
             margin-bottom: 0.25rem;
@@ -305,21 +406,25 @@
         }
 
         .stat-box {
-            background: rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 0.75rem;
+            padding: 0.6rem;
             text-align: center;
         }
 
+        body.light-theme .stat-box {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
         .stat-box .val {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
+
             font-variant-numeric: tabular-nums;
             display: block;
             margin-top: 0.25rem;
         }
-
 
         .stat-box .lbl {
             font-size: 0.75rem;
@@ -329,41 +434,45 @@
         }
 
         .log-panel {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.15);
             border-radius: 10px;
-            height: 140px;
+            height: 120px;
             overflow-y: auto;
             padding: 0.5rem;
             border: 1px solid var(--border);
+
             display: flex;
             flex-direction: column;
             gap: 0.35rem;
             scroll-behavior: smooth;
         }
 
+        body.light-theme .log-panel {
+            background: rgba(0, 0, 0, 0.03);
+        }
 
         .log-entry {
             font-size: 0.85rem;
             padding: 0.35rem 0.6rem;
             border-radius: 6px;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255,255,255,0.01);
             color: var(--text-muted);
             border-left: 3px solid transparent;
             font-family: monospace;
         }
 
+
         .log-entry.active {
-            background: rgba(99, 102, 241, 0.15);
-            color: #e0e7ff;
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--primary);
             border-left-color: var(--primary);
             font-weight: 600;
         }
 
         .notification-box {
             background-color: rgba(16, 185, 129, 0.1);
-
             border: 1px solid rgba(16, 185, 129, 0.2);
-            color: #d1fae5;
+            color: var(--success);
             padding: 0.75rem 1rem;
             border-radius: 10px;
             font-size: 0.85rem;
@@ -372,16 +481,58 @@
             align-items: center;
             gap: 0.5rem;
         }
+
+
+        /* Analytics Canvas Component Section Graph Container CSS */
+        .chart-wrapper {
+            width: 100%;
+            height: 130px;
+            position: relative;
+            margin-top: 0.25rem;
+            background: rgba(0,0,0,0.12);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .test-diagnostics-container {
+            background-color: #090d16;
+            border-radius: 10px;
+
+            border: 1px solid #ef4444;
+            padding: 0.75rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .test-line { padding: 0.15rem 0.4rem; border-radius: 4px; }
+        .test-pass { color: #34d399; background: rgba(52, 211, 153, 0.08); }
+        .test-fail { color: #f87171; background: rgba(248, 113, 113, 0.08); }
+        .test-header { color: #60a5fa; font-weight: bold; margin-top: 0.4rem;}
     </style>
 </head>
 <body>
 
+
 <div class="container">
     <header>
-        <h1>Tower of Hanoi Architecture Visualizer</h1>
-        <p>Analyze production call stacks, state vectors, and movement paths recursively in real-time.</p>
+        <h1>Tower of Hanoi Visualizer Pro</h1>
+        <p>Analyze production call stacks, complexity charts, and drag states interactively.</p>
+        
+        <div class="theme-panel">
+            <button id="btnThemeDark" class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">Dark Slate</button>
+            <button id="btnThemeLight" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">Light Minimal</button>
+        </div>
     </header>
-
 
     <section class="control-card">
         <div class="control-group">
@@ -391,9 +542,10 @@
         </div>
 
         <div class="control-group">
+
             <label for="speedSlider">Delay (ms)</label>
-            <input type="range" id="speedSlider" min="100" max="2000" step="50" value="600">
-            <span class="value-display" id="speedDisplay">600ms</span>
+            <input type="range" id="speedSlider" min="100" max="2000" step="50" value="450">
+            <span class="value-display" id="speedDisplay">450ms</span>
         </div>
 
         <div class="btn-cluster">
@@ -401,32 +553,36 @@
             <button id="btnPlay" class="btn-primary">Play Sequence</button>
             <button id="btnNext">Step &rarr;</button>
             <button id="btnReset">Reset</button>
+            <button id="btnRunTests" class="btn-test">Run Integrity Tests</button>
         </div>
-
     </section>
 
+    <div class="test-diagnostics-container" id="testContainer"></div>
+
+    <!-- Main visual sandbox arena with native layout drag configurations -->
     <main class="stage-card" id="visualStage">
-        <div class="rod-container" id="rodContainerA">
+        <div class="rod-container" id="rodContainerA" data-peg="A">
+
             <div class="rod-shaft"></div>
-            <div class="disks-stack" id="stackA"></div>
+            <div class="disks-stack" id="stackA" data-peg="A"></div>
             <div class="rod-base"></div>
             <div class="rod-label">A</div>
         </div>
 
-        <div class="rod-container" id="rodContainerB">
+        <div class="rod-container" id="rodContainerB" data-peg="B">
             <div class="rod-shaft"></div>
-            <div class="disks-stack" id="stackB"></div>
+            <div class="disks-stack" id="stackB" data-peg="B"></div>
             <div class="rod-base"></div>
             <div class="rod-label">B</div>
         </div>
 
-        <div class="rod-container" id="rodContainerC">
+        <div class="rod-container" id="rodContainerC" data-peg="C">
             <div class="rod-shaft"></div>
-
-            <div class="disks-stack" id="stackC"></div>
+            <div class="disks-stack" id="stackC" data-peg="C"></div>
             <div class="rod-base"></div>
             <div class="rod-label">C</div>
         </div>
+
     </main>
 
     <div class="notification-box" id="notificationAlert">
@@ -435,17 +591,22 @@
 
     <section class="meta-container">
         <div class="info-card">
-            <h2>Graph Telemetry</h2>
+            <h2>Live Complexity Matrix & Time Graph</h2>
             <div class="stat-grid">
                 <div class="stat-box">
                     <span class="lbl">Current Move</span>
                     <span class="val" id="statCurrentMove">0</span>
                 </div>
                 <div class="stat-box">
-
                     <span class="lbl">Total O(2ⁿ-1)</span>
                     <span class="val" id="statTotalMoves">31</span>
                 </div>
+            </div>
+
+            
+            <!-- Real-time SVG charting space -->
+            <div class="chart-wrapper">
+                <svg class="chart-svg" id="analyticsChart"></svg>
             </div>
         </div>
 
@@ -458,13 +619,19 @@
 
 <script>
     let diskCount = 5;
-    let delayDuration = 600;
+    let delayDuration = 450;
     let movesSequence = [];
     let currentStepIndex = -1;
-    let runLoopTimer = null;
 
+    let runLoopTimer = null;
     let isAutoPlaying = false;
+    
+    // Core memory arrays representing peg items
     let stateRods = { A: [], B: [], C: [] };
+    
+    // Track manual interaction offsets
+    let manualMovesCount = 0;
+    let isUserInteractingManually = false;
 
     const diskSlider = document.getElementById('diskSlider');
     const diskCountDisplay = document.getElementById('diskCountDisplay');
@@ -475,17 +642,40 @@
     const btnPrev = document.getElementById('btnPrev');
     const btnNext = document.getElementById('btnNext');
     const btnReset = document.getElementById('btnReset');
+
+    const btnRunTests = document.getElementById('btnRunTests');
+    
+    const btnThemeDark = document.getElementById('btnThemeDark');
+    const btnThemeLight = document.getElementById('btnThemeLight');
     
     const stackA = document.getElementById('stackA');
     const stackB = document.getElementById('stackB');
     const stackC = document.getElementById('stackC');
     const logPanel = document.getElementById('logPanel');
+    const testContainer = document.getElementById('testContainer');
     const notificationAlert = document.getElementById('notificationAlert');
+    const analyticsChart = document.getElementById('analyticsChart');
     
-
     const statCurrentMove = document.getElementById('statCurrentMove');
     const statTotalMoves = document.getElementById('statTotalMoves');
 
+    // Theme Management Triggers
+    btnThemeDark.addEventListener('click', () => {
+        document.body.classList.remove('light-theme');
+
+        btnThemeDark.classList.add('btn-primary');
+        btnThemeLight.classList.remove('btn-primary');
+        drawAnalyticsChart();
+    });
+
+    btnThemeLight.addEventListener('click', () => {
+        document.body.classList.add('light-theme');
+        btnThemeLight.classList.add('btn-primary');
+        btnThemeDark.classList.remove('btn-primary');
+        drawAnalyticsChart();
+    });
+
+    // Core Solver Logic Sequence
     function generateHanoiSequence(n, source, target, aux) {
         if (n === 0) return;
         generateHanoiSequence(n - 1, source, aux, target);
@@ -493,22 +683,26 @@
         generateHanoiSequence(n - 1, aux, target, source);
     }
 
+
     function initSimulationState() {
         stopAutoPlayback();
         movesSequence = [];
         currentStepIndex = -1;
+        manualMovesCount = 0;
+        isUserInteractingManually = false;
         notificationAlert.style.display = 'none';
         
         generateHanoiSequence(diskCount, 'A', 'C', 'B');
         statTotalMoves.textContent = movesSequence.length;
         statCurrentMove.textContent = 0;
-
         
         reconstructRodsMemory();
         renderActiveDisplayStage();
         compileTraceLogs();
         updateNavigationButtons();
+        drawAnalyticsChart();
     }
+
 
     function reconstructRodsMemory() {
         stateRods = { A: [], B: [], C: [] };
@@ -522,7 +716,6 @@
         for (let i = 0; i <= targetIndex; i++) {
             const currentMove = movesSequence[i];
             const activeDisk = stateRods[currentMove.originPeg].pop();
-
             stateRods[currentMove.targetPeg].push(activeDisk);
         }
     }
@@ -530,6 +723,7 @@
     function renderActiveDisplayStage() {
         stackA.innerHTML = '';
         stackB.innerHTML = '';
+
         stackC.innerHTML = '';
         const rodElementsMap = { A: stackA, B: stackB, C: stackC };
         const baseWidthPercent = 90;
@@ -537,18 +731,131 @@
 
         ['A', 'B', 'C'].forEach(pegKey => {
             const rodTarget = rodElementsMap[pegKey];
-            stateRods[pegKey].forEach(diskSize => {
+            const length = stateRods[pegKey].length;
+            
+            stateRods[pegKey].forEach((diskSize, innerIdx) => {
                 const diskElement = document.createElement('div');
                 diskElement.className = `disk`;
+                
+                if (innerIdx === length - 1 && isAutoPlaying) {
+                    diskElement.className += ' pop-active';
+                }
+                
+                // If it is the top-most item on a peg, make it natively draggable
+                if (innerIdx === length - 1 && !isAutoPlaying) {
+
+                    diskElement.setAttribute('draggable', 'true');
+                    diskElement.className += ' draggable';
+                    setupDragAndDropListeners(diskElement, pegKey);
+                }
+
                 diskElement.textContent = diskSize;
                 const evaluatedWidth = baseWidthPercent - ((diskCount - diskSize) * widthStep);
-
                 diskElement.style.width = `${Math.max(evaluatedWidth, 22)}%`;
                 diskElement.style.backgroundColor = `var(--disk-${diskSize})`;
                 rodTarget.appendChild(diskElement);
             });
         });
-        statCurrentMove.textContent = currentStepIndex + 1;
+
+        if (isUserInteractingManually) {
+            statCurrentMove.textContent = manualMovesCount + " (Manual)";
+        } else {
+            statCurrentMove.textContent = currentStepIndex + 1;
+        }
+        drawAnalyticsChart();
+
+    }
+
+    // ==========================================
+    // DRAG AND DROP RUNTIME EVENTS ENGINE
+    // ==========================================
+    function setupDragAndDropListeners(diskNode, currentPeg) {
+        diskNode.addEventListener('dragstart', (e) => {
+            if (isAutoPlaying) { e.preventDefault(); return; }
+            diskNode.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', currentPeg);
+        });
+
+        diskNode.addEventListener('dragend', () => {
+            diskNode.classList.remove('dragging');
+            const contentContainers = document.querySelectorAll('.rod-container');
+            contentContainers.forEach(c => c.classList.remove('drag-over'));
+        });
+    }
+
+
+    // Configure structural landing targets on adjacent rod channels
+    const containers = document.querySelectorAll('.rod-container');
+    containers.forEach(container => {
+        container.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Required to allow landing drops
+            if (isAutoPlaying) return;
+            container.classList.add('drag-over');
+        });
+
+        container.addEventListener('dragleave', () => {
+            container.classList.remove('drag-over');
+        });
+
+        container.addEventListener('drop', (e) => {
+            e.preventDefault();
+            container.classList.remove('drag-over');
+            if (isAutoPlaying) return;
+
+            const sourcePeg = e.dataTransfer.getData('text/plain');
+
+            const targetPeg = container.getAttribute('data-peg');
+
+            if (sourcePeg === targetPeg || !sourcePeg) return;
+
+            const sourceStack = stateRods[sourcePeg];
+            const targetStack = stateRods[targetPeg];
+
+            if (sourceStack.length === 0) return;
+
+            const movingDiskSize = sourceStack[sourceStack.length - 1];
+            const destinationTopDiskSize = targetStack[targetStack.length - 1];
+
+            // Core constraint assertion: check structural rules before modification
+            if (targetStack.length > 0 && movingDiskSize > destinationTopDiskSize) {
+                // Flash alert layout notice
+                container.style.outline = '3px solid var(--danger)';
+                setTimeout(() => { container.style.outline = 'none'; }, 500);
+                return;
+            }
+
+
+            // Perform transaction across data records
+            const validatedDisk = sourceStack.pop();
+            targetStack.push(validatedDisk);
+            
+            if (!isUserInteractingManually) {
+                isUserInteractingManually = true;
+                manualMovesCount = 0;
+                btnPrev.disabled = true;
+                btnNext.disabled = true;
+            }
+            
+            manualMovesCount++;
+            
+            // Add action note to system log panel
+            const logItem = document.createElement('div');
+            logItem.className = 'log-entry active';
+            logItem.innerHTML = `[Manual Move ${manualMovesCount}] Shifted Disk <strong>${validatedDisk}</strong> from Peg ${sourcePeg} &rarr; Peg ${targetPeg}`;
+            logPanel.appendChild(logItem);
+            logPanel.scrollTop = logPanel.scrollHeight;
+
+
+            renderActiveDisplayStage();
+            checkManualWinCondition();
+        });
+    });
+
+    function checkManualWinCondition() {
+        if (stateRods.A.length === 0 && stateRods.B.length === 0 && stateRods.C.length === diskCount) {
+            notificationAlert.style.display = 'flex';
+            notificationAlert.innerHTML = `<strong>Puzzle Solved!</strong> You completed the relocation mapping manually in ${manualMovesCount} moves.`;
+        }
     }
 
     function compileTraceLogs() {
@@ -558,10 +865,10 @@
             entry.className = 'log-entry';
             entry.id = `log-node-${idx}`;
             entry.innerHTML = `[Step ${String(idx + 1).padStart(2, '0')}] Move Disk <strong>${move.diskId}</strong>: ${move.originPeg} &rarr; ${move.targetPeg}`;
+
             logPanel.appendChild(entry);
         });
     }
-
 
     function synchroniseLogHighlights() {
         const entryNodes = logPanel.querySelectorAll('.log-entry');
@@ -578,13 +885,15 @@
     }
 
     function updateNavigationButtons() {
+
+        if (isUserInteractingManually) return;
         btnPrev.disabled = (currentStepIndex === -1);
         btnNext.disabled = (currentStepIndex === movesSequence.length - 1);
         notificationAlert.style.display = (currentStepIndex === movesSequence.length - 1 && !isAutoPlaying) ? 'flex' : 'none';
     }
 
-
     function transitionStepForward() {
+        if (isUserInteractingManually) { isUserInteractingManually = false; initSimulationState(); return; }
         if (currentStepIndex < movesSequence.length - 1) {
             currentStepIndex++;
             evaluateStateVectorsUpTo(currentStepIndex);
@@ -596,33 +905,36 @@
         return false;
     }
 
+
     function transitionStepBackward() {
+        if (isUserInteractingManually) { isUserInteractingManually = false; initSimulationState(); return; }
         if (currentStepIndex >= 0) {
             currentStepIndex--;
             evaluateStateVectorsUpTo(currentStepIndex);
             renderActiveDisplayStage();
             synchroniseLogHighlights();
             updateNavigationButtons();
-
             return true;
         }
         return false;
     }
 
     function startAutoPlayback() {
+        if (isUserInteractingManually) { isUserInteractingManually = false; reconstructRodsMemory(); currentStepIndex = -1; }
         isAutoPlaying = true;
         btnPlay.textContent = 'Pause Pipeline';
         btnPlay.style.backgroundColor = 'var(--danger)';
         btnPlay.style.borderColor = 'var(--danger)';
+
         diskSlider.disabled = true;
         runLoopTimer = setInterval(() => {
             if (!transitionStepForward()) {
                 stopAutoPlayback();
+                renderActiveDisplayStage();
                 notificationAlert.style.display = 'flex';
             }
         }, delayDuration);
     }
-
 
     function stopAutoPlayback() {
         isAutoPlaying = false;
@@ -633,9 +945,196 @@
         if (runLoopTimer) {
             clearInterval(runLoopTimer);
             runLoopTimer = null;
+
         }
     }
 
+    // ==========================================
+    // ANALYTICS PLOT ENGINE (SVG GENERATOR)
+    // ==========================================
+    function drawAnalyticsChart() {
+        analyticsChart.innerHTML = '';
+        const width = analyticsChart.clientWidth || 400;
+        const height = analyticsChart.clientHeight || 130;
+        const paddingLeft = 35;
+        const paddingRight = 15;
+        const paddingTop = 15;
+        const paddingBottom = 20;
+
+        const maxScaleY = Math.pow(2, diskCount) - 1;
+        const totalSteps = maxScaleY;
+
+        const points = [];
+
+        for (let i = 0; i <= totalSteps; i++) {
+            const cx = paddingLeft + (i / totalSteps) * (width - paddingLeft - paddingRight);
+            const cy = (height - paddingBottom) - (i / maxScaleY) * (height - paddingTop - paddingBottom);
+            points.push({x: cx, y: cy, step: i});
+        }
+
+        // Draw structural background matrix grid references
+        const gridLines = 3;
+        const themeMutedColor = document.body.classList.contains('light-theme') ? '#cbd5e1' : '#384252';
+        const themeTextColor = document.body.classList.contains('light-theme') ? '#475569' : '#94a3b8';
+
+        for (let g = 0; g <= gridLines; g++) {
+            const hVal = (g / gridLines) * (height - paddingTop - paddingBottom);
+            const cy = (height - paddingBottom) - hVal;
+            const yLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            yLine.setAttribute("x1", paddingLeft);
+            yLine.setAttribute("y1", cy);
+            yLine.setAttribute("x2", width - paddingRight);
+            yLine.setAttribute("y2", cy);
+
+            yLine.setAttribute("stroke", themeMutedColor);
+            yLine.setAttribute("stroke-width", "1");
+            yLine.setAttribute("stroke-dasharray", "3,3");
+            analyticsChart.appendChild(yLine);
+
+            // Add Y axis string label vectors
+            const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            txt.setAttribute("x", paddingLeft - 8);
+            txt.setAttribute("y", cy + 4);
+            txt.setAttribute("fill", themeTextColor);
+            txt.setAttribute("font-size", "9px");
+            txt.setAttribute("text-anchor", "end");
+            txt.textContent = Math.round((g / gridLines) * maxScaleY);
+            analyticsChart.appendChild(txt);
+        }
+
+        // Generate theoretical curve path
+        let pathString = `M ${points[0].x} ${points[0].y}`;
+        for (let i = 1; i < points.length; i++) {
+
+            pathString += ` L ${points[i].x} ${points[i].y}`;
+        }
+
+        const theoreticalLine = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        theoreticalLine.setAttribute("d", pathString);
+        theoreticalLine.setAttribute("fill", "none");
+        theoreticalLine.setAttribute("stroke", "#475569");
+        theoreticalLine.setAttribute("stroke-width", "2");
+        analyticsChart.appendChild(theoreticalLine);
+
+        // Render current progress step circle nodule
+        let currentTargetIndex = isUserInteractingManually ? manualMovesCount : currentStepIndex + 1;
+        if (currentTargetIndex > totalSteps) currentTargetIndex = totalSteps;
+        
+        const activePointIdx = Math.min(currentTargetIndex, totalSteps);
+        const targetNodeCoord = points[activePointIdx] || points[0];
+
+        // Draw structural progress bounding shading area
+        let areaString = `M ${points[0].x} ${height - paddingBottom}`;
+
+        for(let i=0; i<=activePointIdx; i++) {
+            areaString += ` L ${points[i].x} ${points[i].y}`;
+        }
+        areaString += ` L ${targetNodeCoord.x} ${height - paddingBottom} Z`;
+        
+        const progressArea = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        progressArea.setAttribute("d", areaString);
+        progressArea.setAttribute("fill", "rgba(99, 102, 241, 0.15)");
+        analyticsChart.appendChild(progressArea);
+
+        // Core tracking point bubble
+        const trackerCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        trackerCircle.setAttribute("cx", targetNodeCoord.x);
+        trackerCircle.setAttribute("cy", targetNodeCoord.y);
+        trackerCircle.setAttribute("r", "5");
+        trackerCircle.setAttribute("fill", "var(--primary)");
+        trackerCircle.setAttribute("stroke", "white");
+        trackerCircle.setAttribute("stroke-width", "1.5");
+        analyticsChart.appendChild(trackerCircle);
+
+
+        // Axis structural labels text formatting
+        const labelX = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        labelX.setAttribute("x", width / 2 + paddingLeft / 2);
+        labelX.setAttribute("y", height - 4);
+        labelX.setAttribute("fill", themeTextColor);
+        labelX.setAttribute("font-size", "10px");
+        labelX.setAttribute("text-anchor", "middle");
+        labelX.textContent = `Algorithmic Progress Execution Space`;
+        analyticsChart.appendChild(labelX);
+    }
+
+    // ==========================================
+    // ANALYTICAL INTEGRITY TESTING SUITE
+    // ==========================================
+    function logTestResult(desc, passed, detail = "") {
+        const line = document.createElement('div');
+        line.className = `test-line ${passed ? 'test-pass' : 'test-fail'}`;
+        line.innerHTML = `• [${passed ? 'PASS' : 'FAIL'}] ${desc} ${detail ? '-> ' + detail : ''}`;
+        testContainer.appendChild(line);
+
+        return passed;
+    }
+
+    function logTestHeader(title) {
+        const header = document.createElement('div');
+        header.className = 'test-header';
+        header.textContent = `--- Suite: ${title} ---`;
+        testContainer.appendChild(header);
+    }
+
+    function runDiagnosticTests() {
+        stopAutoPlayback();
+        testContainer.innerHTML = "";
+        testContainer.style.display = "flex";
+        testContainer.style.borderColor = "var(--warning)";
+        
+        logTestHeader("Tower of Hanoi Mathematical State Assertions");
+        
+        const calculatedMoves = movesSequence.length;
+
+        const mathematicalFormulaValue = Math.pow(2, diskCount) - 1;
+        const test1Pass = (calculatedMoves === mathematicalFormulaValue);
+        logTestResult(`Calculated Moves count matches theoretical 2ⁿ - 1 boundaries`, test1Pass, `Found: ${calculatedMoves}, Expected: ${mathematicalFormulaValue}`);
+
+        let localRods = { A: [], B: [], C: [] };
+        for (let i = diskCount; i >= 1; i--) localRods.A.push(i);
+        
+        let invalidPlacementDetected = false;
+        let emptyMoveDetected = false;
+
+        for (let step = 0; step < movesSequence.length; step++) {
+            const move = movesSequence[step];
+            if (localRods[move.originPeg].length === 0) { emptyMoveDetected = true; break; }
+            
+            const diskToMove = localRods[move.originPeg].pop();
+            const targetPegLen = localRods[move.targetPeg].length;
+            
+            if (targetPegLen > 0) {
+                const topDiskOnTarget = localRods[move.targetPeg][targetPegLen - 1];
+
+                if (diskToMove > topDiskOnTarget) { invalidPlacementDetected = true; break; }
+            }
+            localRods[move.targetPeg].push(diskToMove);
+        }
+
+        logTestResult("State Machine validation sequence: No illegal overwrites (Larger disk on smaller disk)", !invalidPlacementDetected);
+        logTestResult("Stack execution validation sequence: No vacuum actions (Popping off empty arrays)", !emptyMoveDetected);
+
+        const test3Pass = (localRods.A.length === 0 && localRods.B.length === 0 && localRods.C.length === diskCount);
+        logTestResult("Target criteria initialization checks: All node variants safely re-allocated to Peg C", test3Pass);
+        
+        if (test1Pass && !invalidPlacementDetected && !emptyMoveDetected && test3Pass) {
+            testContainer.style.borderColor = "var(--success)";
+            const successNotice = document.createElement('div');
+            successNotice.style.color = "var(--success)";
+            successNotice.style.fontWeight = "bold";
+            successNotice.style.marginTop = "0.5rem";
+            successNotice.textContent = "✔ ALL SIMULATED RUNTIME UNIT TESTS PASSED SUCCESSFULLY.";
+            testContainer.appendChild(successNotice);
+
+        } else {
+            testContainer.style.borderColor = "var(--danger)";
+        }
+        
+        setTimeout(() => { testContainer.style.display = "none"; }, 7000);
+    }
+
+    // Interactivity Resize/Event hooks
     diskSlider.addEventListener('input', (e) => {
         diskCount = parseInt(e.target.value);
         diskCountDisplay.textContent = diskCount;
@@ -643,11 +1142,11 @@
     });
 
     speedSlider.addEventListener('input', (e) => {
-
         delayDuration = parseInt(e.target.value);
         speedDisplay.textContent = `${delayDuration}ms`;
         if (isAutoPlaying) {
             stopAutoPlayback();
+
             startAutoPlayback();
         }
     });
@@ -655,21 +1154,21 @@
     btnPlay.addEventListener('click', () => {
         if (isAutoPlaying) {
             stopAutoPlayback();
+            renderActiveDisplayStage();
         } else {
-            if (currentStepIndex === movesSequence.length - 1) {
-                currentStepIndex = -1;
-                evaluateStateVectorsUpTo(currentStepIndex);
-                renderActiveDisplayStage();
-                synchroniseLogHighlights();
+            if (currentStepIndex === movesSequence.length - 1 || isUserInteractingManually) {
+                initSimulationState();
             }
             startAutoPlayback();
-
         }
     });
 
     btnNext.addEventListener('click', () => { stopAutoPlayback(); transitionStepForward(); });
     btnPrev.addEventListener('click', () => { stopAutoPlayback(); transitionStepBackward(); });
     btnReset.addEventListener('click', () => { initSimulationState(); });
+
+    btnRunTests.addEventListener('click', runDiagnosticTests);
+    window.addEventListener('resize', drawAnalyticsChart);
 
     window.onload = function() { initSimulationState(); };
 </script>
